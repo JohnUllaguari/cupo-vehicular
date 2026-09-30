@@ -1,0 +1,60 @@
+service: cupo-vehicular
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    DB_HOST: ${env:DB_HOST, 'localhost'}
+    DB_PORT: ${env:DB_PORT, '5432'}
+    DB_USER: ${env:DB_USER, 'cupo'}
+    DB_PASSWORD: ${env:DB_PASSWORD, 'cupo123'}
+    DB_NAME: ${env:DB_NAME, 'cupo_vehicular'}
+
+plugins:
+  - serverless-offline
+
+functions:
+  health:
+    handler: src/handlers/health.health
+    events:
+      - http:
+          path: health
+          method: get
+  crearColaborador:
+    handler: src/handlers/colaboradores.crear
+    events:
+      - http:
+          path: colaboradores
+          method: post
+  actualizarCupo:
+    handler: src/handlers/colaboradores.actualizarCupo
+    events:
+      - http:
+          path: colaboradores/{cedula}/cupo
+          method: put
+  acreditarCupo:
+    handler: src/handlers/colaboradores.acreditar
+    events:
+      - http:
+          path: colaboradores/{cedula}/acreditar
+          method: post
+  registrarFactura:
+    handler: src/handlers/facturas.registrar
+    events:
+      - http:
+          path: facturas
+          method: post
+  sincronizarFacturas:
+    handler: src/handlers/sincronizacion.facturas
+    events:
+      - http:
+          path: sincronizar/facturas
+          method: post
+  sincronizarGasclub:
+    handler: src/handlers/sincronizacion.gasclub
+    events:
+      - http:
+          path: sincronizar/gasclub
+          method: post

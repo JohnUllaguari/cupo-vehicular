@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: cupo-db
+    environment:
+      POSTGRES_USER: cupo
+      POSTGRES_PASSWORD: cupo123
+      POSTGRES_DB: cupo_vehicular
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
